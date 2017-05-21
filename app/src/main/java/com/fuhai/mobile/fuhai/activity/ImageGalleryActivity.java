@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.fuhai.mobile.fuhai.R;
+import com.fuhai.mobile.fuhai.utils.CustomTimer;
 import com.fuhai.mobile.fuhai.view.RLoopRecyclerView;
 
 import java.io.BufferedReader;
@@ -32,6 +33,7 @@ public class ImageGalleryActivity extends Activity {
     RLoopRecyclerView recyclerView;
     MyAdapter myAdapter;
     int currentPosition=0;
+    private CustomTimer customTimer ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +42,8 @@ public class ImageGalleryActivity extends Activity {
         initView();
         initData();
         initListener();
+
+        customTimer =addTimer(this);
 /**
  *          int position = myAdapter.getCurrentPosition();
  if(position!=0 && position>3){
@@ -78,6 +82,14 @@ public class ImageGalleryActivity extends Activity {
            // tvBottomTitle.setText(strTitle);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        customTimer.stopRun();
+        customTimer.stopTimer();
+    }
+
     private String getTitleStr(String titlePath){
         String strTitle="";
         if(TextUtils.isEmpty(titlePath)){
@@ -152,7 +164,30 @@ public class ImageGalleryActivity extends Activity {
         }
 
     }
+    private CustomTimer addTimer(final Activity activity) {
+        CustomTimer timer = new CustomTimer();
+        timer.setOnTimerListener(new CustomTimer.TimerListener() {
+            @Override
+            public void onCompleted() {
+                ImageGalleryActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        currentPosition+=1;
+                        if(currentPosition>myAdapter.getItemRawCount()-1){
+                            currentPosition =0;
+                        }
+                        recyclerView.scrollToPosition(currentPosition);
+                    }
+                });
+
+            }
+        });
+        return timer;
+    }
+
+
     boolean isFirst =true;
+    boolean isAuto =false;
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(isFirst){
             currentPosition= recyclerView.getCurrentPosition();
@@ -160,7 +195,13 @@ public class ImageGalleryActivity extends Activity {
         }
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_CENTER:  //按下中间键
-
+                isAuto =!isAuto;
+                if(isAuto){
+                    customTimer.beginRun();
+                }else {
+                    isFirst =true;
+                    customTimer.stopRun();
+                }
                 break;
 
             case KeyEvent.KEYCODE_DPAD_DOWN:  //按下下方向
@@ -183,6 +224,7 @@ public class ImageGalleryActivity extends Activity {
                 break;
 
             case KeyEvent.KEYCODE_DPAD_UP:  //按下上方向键
+
                 break;
             case KeyEvent.KEYCODE_MENU:  //按下菜单键
                 break;
