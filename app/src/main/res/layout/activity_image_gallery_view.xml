@@ -14,16 +14,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" >
 
-        <TextView
+        <com.fuhai.mobile.fuhai.view.MarqueeTextView
             android:id="@+id/tv_bottom_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#66000000"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_gravity="center_vertical"
-            android:maxLines="1"
-            android:inputType="text"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             android:textColor="#ffffff"
             android:hint="@string/text_test"
             android:textSize="40sp" />

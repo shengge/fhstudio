@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fuhai.mobile.fuhai.R;
@@ -34,6 +35,7 @@ public class ImageGalleryActivity extends Activity {
     MyAdapter myAdapter;
     int currentPosition=0;
     private CustomTimer customTimer ;
+    TextView tvBottomTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,11 +78,7 @@ public class ImageGalleryActivity extends Activity {
             {
                 mImagePathList.add(str);
             }
-        String titlePath = path+ File.separator+"title"+File.separator+"welcome.txt";
-        String strTitle =  getTitleStr(titlePath);
-        if(!TextUtils.isEmpty(strTitle)){
-           // tvBottomTitle.setText(strTitle);
-        }
+
     }
 
     @Override
@@ -116,9 +114,17 @@ public class ImageGalleryActivity extends Activity {
     }
 
     private void initData() {
+        String titlePath = path+ File.separator+"title"+File.separator+"welcome.txt";
+        String strTitle =  getTitleStr(titlePath);
+        if(!TextUtils.isEmpty(strTitle)){
+             tvBottomTitle.setText(strTitle);
+        }else {
+            tvBottomTitle.setText(this.getResources().getString(R.string.text_test));
+        }
     }
 
     private void initView() {
+        tvBottomTitle = (TextView) findViewById(R.id.tv_bottom_title);
         recyclerView = (RLoopRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         myAdapter = new MyAdapter();
