@@ -23,6 +23,8 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             android:textColor="#ffffff"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:hint="@string/text_test"
             android:textSize="40sp" />
 

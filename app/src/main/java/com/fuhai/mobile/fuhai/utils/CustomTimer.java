@@ -20,7 +20,7 @@ public class CustomTimer {
                     timerListener.onCompleted();
                 }
             }
-        }, 100, 1000);
+        }, 100, 3000);
     }
       
     public void stopRun(){  
