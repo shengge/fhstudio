@@ -159,9 +159,6 @@ public class HomeActivity extends Activity {
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
-            for (int i = 0; i < result.length; i++) {
-                System.out.println("path----> " + result[i]+"\n");
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

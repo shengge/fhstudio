@@ -137,11 +137,6 @@ public class ImageGalleryActivity extends Activity {
     }
 
     class MyAdapter extends RLoopRecyclerView.LoopAdapter<MyViewHolder> {
-        private int currentPosition = 0;
-
-        public int getCurrentPosition() {
-            return currentPosition;
-        }
 
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -152,15 +147,17 @@ public class ImageGalleryActivity extends Activity {
 
         @Override
         public void onBindLoopViewHolder(MyViewHolder holder, int position) {
-            this.currentPosition = position;
             ImageView imageView = (ImageView) holder.itemView.findViewById(R.id.iv_view);
             imageView.setImageURI(Uri.parse(mImagePathList.get(position)));
-            Toast.makeText(ImageGalleryActivity.this,mImagePathList.get(position),Toast.LENGTH_SHORT).show();
         }
 
     }
+    boolean isFirst =true;
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        currentPosition = myAdapter.getCurrentPosition();
+        if(isFirst){
+            currentPosition= recyclerView.getCurrentPosition();
+            isFirst =false;
+        }
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_CENTER:  //按下中间键
 
@@ -170,16 +167,19 @@ public class ImageGalleryActivity extends Activity {
                 break;
 
             case KeyEvent.KEYCODE_DPAD_LEFT:  //按下左方向键
-                if(currentPosition!=0){
-                    currentPosition-=1;
-                }else {
-                    currentPosition =mImagePathList.size()-1;
+                currentPosition-=1;
+                if(currentPosition<0){
+                    currentPosition = myAdapter.getItemRawCount()-1;
                 }
                 recyclerView.scrollToPosition(currentPosition);
                 break;
 
             case KeyEvent.KEYCODE_DPAD_RIGHT:  //按下右方向键
-                recyclerView.scrollToPosition(currentPosition+1);
+                currentPosition+=1;
+                if(currentPosition>myAdapter.getItemRawCount()-1){
+                    currentPosition =0;
+                }
+                recyclerView.scrollToPosition(currentPosition);
                 break;
 
             case KeyEvent.KEYCODE_DPAD_UP:  //按下上方向键

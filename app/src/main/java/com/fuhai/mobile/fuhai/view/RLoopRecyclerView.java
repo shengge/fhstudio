@@ -42,14 +42,19 @@ public class RLoopRecyclerView extends RecyclerView {
         super.setAdapter(adapter);
         scrollToPosition(getAdapter().getItemRawCount() * 10000);//开始时的偏移量
     }
+    private int currentPosition = 0;
 
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
     private void initView() {
-//        new RPagerSnapHelper().setOnPageListener(new RPagerSnapHelper.OnPageListener() {
-//            @Override
-//            public void onPageSelector(int position) {
-//                Log.e(TAG, "onPageSelector: " + position % getAdapter().getItemRawCount());
-//            }
-//        }).attachToRecyclerView(this);
+        new RPagerSnapHelper().setOnPageListener(new RPagerSnapHelper.OnPageListener() {
+            @Override
+            public void onPageSelector(int position) {
+                currentPosition = position % getAdapter().getItemRawCount();
+                Log.e(TAG, "onPageSelector: " + position % getAdapter().getItemRawCount());
+            }
+        }).attachToRecyclerView(this);
     }
 
     public static abstract class LoopAdapter<T extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<T> {
